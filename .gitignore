@@ -1,2 +1,2 @@
-Outputs/*
-Tables/*
+Outputs/*.txt
+Tables/*.sql
