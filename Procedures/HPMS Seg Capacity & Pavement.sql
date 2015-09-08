@@ -1,8 +1,8 @@
 create or replace PROCEDURE HPMS_SEG_CAPACITY_PAVEMENT_PAVEMENT_PROC
 AS
 	debug_file UTL_FILE.FILE_TYPE;
-  
- 	routeID VARCHAR2(50);
+
+	routeID VARCHAR2(50);
 
 	section_begin_point NUMBER(7,3);
 	section_end_point NUMBER(7,3);
@@ -20,9 +20,10 @@ BEGIN
 
 debug_file := UTL_FILE.FOPEN ('TEST_ALFO_DIR', 'HPMS_SEG_CAPACITY_PAVEMENT.txt', 'W');
 
+-- Loop over each individual ROUTE_ID
 FOR cursor2 IN (select ROUTE_ID from hpms_section group by route_id order by count(route_id) desc) LOOP
 	routeID := cursor2.ROUTE_ID;
-  
+
 	-- Loop over each segment of a same road
 	FOR cursor IN (SELECT * FROM HPMS_SECTION HPMS WHERE HPMS.ROUTE_ID = routeID AND HPMS.SHAPE.SDO_GTYPE = 2002 AND HPMS.DATA_ITEM IN ('AADT', 'PCT_PEAK_COMBINATION', 'PCT_PEAK_SINGLE', 'PCT_PASS_SIGHT', 'K_FACTOR', 'DIR_FACTOR', 'SHOULDER_WIDTH_L', 'SHOULDER_WIDTH_R', 'SPEED_LIMIT', 'TERRAIN_TYPE', 'THROUGH_LANES', 'URBAN_CODE', 'FACILITY_TYPE', 'ACCESS_CONTROL', 'LANE_WIDTH', 'MEDIAN_WIDTH', 'SHOULDER_TYPE', 'F_SYSTEM', 'SIGNAL_TYPE', 'PCT_GREEN_TIME', 'NUMBER_SIGNALS', 'STOP_SIGNS', 'COUNTY_CODE', 'IRI', 'SURFACE_TYPE', 'RUTTING', 'FAULTING', 'CRACKING_PERCENT', 'CRACKING_LENGTH', 'PEAK_LANES', 'TURN_LANES_L', 'TURN_LANES_R', 'PEAK_PARKING', 'AT_GRADE_OTHER')) LOOP
 		
@@ -123,7 +124,7 @@ FOR cursor2 IN (select ROUTE_ID from hpms_section group by route_id order by cou
 				  		
 				 	 	UTL_FILE.PUT_LINE (debug_file, 'Updated [ID: ' || segment.OBJECTID || '] to [ID: ' || currentID || '] [BEGIN_POINT: ' || section_begin_point || '] [END_POINT: ' || section_end_point || ']');
 						currentID := currentID + 1;
-					
+
 						segment.OBJECTID := currentID;
 						segment.BEG_POINT := section_end_point;
 
@@ -143,7 +144,6 @@ FOR cursor2 IN (select ROUTE_ID from hpms_section group by route_id order by cou
 
 					first_segment := SDO_LRS.CLIP_GEOM_SEGMENT(SDO_LRS.CONVERT_TO_LRS_GEOM(segment.GEOMETRY, segment.BEG_POINT, segment.END_POINT), segment.BEG_POINT, section_begin_point);
 					second_segment := SDO_LRS.CLIP_GEOM_SEGMENT(SDO_LRS.CONVERT_TO_LRS_GEOM(segment.GEOMETRY, segment.BEG_POINT, segment.END_POINT), section_begin_point, segment.END_POINT);
-
 
 					UPDATE HPMS_SEG_CAPACITY_PAVEMENT SET 
 						OBJECTID = currentID,
