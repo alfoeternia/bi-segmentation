@@ -9,8 +9,6 @@ alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "ROUTE_NUMBER";
 alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "ROUTE_SIGNING";
 alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "ROUTE_QUALIFIER";
 alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "ALTERNATIVE_ROUTE_NAME";
-alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "AADT_SINGLE_UNIT";
-alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "AADT_COMBINATION";
 alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "FUTURE_AADT";
 alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "MEDIAN_TYPE";
 alter table "TEST_USER1"."HPMS_SEG_CAPACITY" drop column "WIDENING_OBSTACLE";
